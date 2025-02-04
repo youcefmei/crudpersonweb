@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeLeaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Web Application</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href=".">Systéme de gestion des pensonnes</a>
+        </div>
+    </div>
+</nav>
+
+<!--  CONTENU -->
+
+
+<h1>Page erreurs</h1>
+<section class="container">
+
+    <table>
+        <tr>
+            <td>Error Message</td>
+            <td th:text="${message}"/>
+        </tr>
+        <tr>
+            <td>Status Code</td>
+            <td th:text="${status}"/>
+        </tr>
+        <tr>
+            <td>Exception</td>
+            <td th:text="${exception}"/>
+        </tr>
+        <tr>
+            <td>StackTrace</td>
+            <td>
+                <pre th:text="${trace}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Binding Errors</td>
+            <td th:text="${error}"/>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td th:text="${timestamp}"/>
+        </tr>
+        <tr>
+            <td>Path</td>
+            <td th:text="${path}"/>
+        </tr>
+    </table>
+</section>
+
+</body>
+</html>
