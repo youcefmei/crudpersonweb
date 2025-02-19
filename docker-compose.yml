@@ -30,7 +30,13 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   api:
     environment:
-      - DATASOURCE_URL=jdbc:mysql://db:3306/springboot}
+      - DATASOURCE_URL=jdbc:mysql://db:3306/springboot
+      - DATASOURCE_USERNAME=your_user
+      - DATASOURCE_PASSWORD=your_password
     depends_on:
       - db
     image: youcefmei/crudpersonapi:latest
+  phpmyadmin:
+    image: phpmyadmin:5.2.2
+    ports:
+      - 8080:80
