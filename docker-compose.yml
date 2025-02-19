@@ -14,29 +14,50 @@ services:
       retries: 5
       start_period: 20s
       timeout: 10s
+    restart: unless-stopped
+    networks:
+      - web_network
   db:
     image: mysql:9.2.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: springboot
-      MYSQL_USER: your_user
-      MYSQL_PASSWORD: your_password
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-springboot}
+      MYSQL_USER: ${DB_USER:-your_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-your_password}
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
       retries: 10
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/:/var/lib/mysql
+    networks:
+      - db_network
   api:
     environment:
-      - DATASOURCE_URL=jdbc:mysql://db:3306/springboot
-      - DATASOURCE_USERNAME=your_user
-      - DATASOURCE_PASSWORD=your_password
+      - DATASOURCE_URL=${DB_ROOT_PASSWORD:-jdbc:mysql://db:3306/springboot}
+      - DATASOURCE_USERNAME=${DB_USER:-your_user}
+      - DATASOURCE_PASSWORD=${DB_PASSWORD:-your_password}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:8080 || exit 1
+      interval: 30s
+      retries: 3
+    restart: unless-stopped
     image: youcefmei/crudpersonapi:latest
+    networks:
+      - db_network
   phpmyadmin:
     image: phpmyadmin:5.2.2
     ports:
       - 8080:80
+    networks:
+      - db_network
+      - web_network
+networks:
+  db_network:
+    internal: true
+  web_network:
